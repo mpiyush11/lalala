@@ -1,0 +1,42 @@
+{
+  "name": "gymos",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "db:start": "supabase start",
+    "db:reset": "supabase db reset",
+    "db:lint": "supabase db lint --local --schema public --level error",
+    "db:verify:rls": "psql \"$DATABASE_URL\" -v ON_ERROR_STOP=1 -f supabase/tests/rls_verification.sql",
+    "test": "node scripts/check-copy.mjs && playwright test && npm run db:reset:fixtures",
+    "test:e2e": "playwright test",
+    "test:copy": "node scripts/check-copy.mjs",
+    "db:reset:fixtures": "node scripts/reset-fixtures.mjs",
+    "verify": "npm run typecheck && npm run build && npm test"
+  },
+  "dependencies": {
+    "@supabase/ssr": "0.10.0",
+    "@supabase/supabase-js": "2.100.1",
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "@types/node": "20.19.43",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "autoprefixer": "10.5.4",
+    "playwright": "^1.47.2",
+    "postcss": "8.5.26",
+    "supabase": "2.111.0",
+    "tailwindcss": "3.4.19",
+    "typescript": "5.9.3"
+  }
+}
