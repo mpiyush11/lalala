@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Next.js output
+.next/
+out/
+
+# TypeScript incremental state
+*.tsbuildinfo
+
+# Environment files
+#
+# `.env` is TRACKED on purpose: it holds only NEXT_PUBLIC_* values, which Next
+# inlines into the client bundle anyway, so a fresh Codespace boots with no
+# manual setup. Everything with real privilege — DATABASE_URL, POOLER_URL,
+# the service-role key — stays in `.env.local`, which is ignored below.
+!.env
+.env.*
+!.env.example
+
+# Supabase CLI local state
+.supabase/
+supabase/.temp/
+
+# Logs and editor/OS files
+*.log
+.DS_Store
+.vscode/
+.idea/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
