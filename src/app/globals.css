@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* One class for the shared card lift, so a card does not have to restate the
+     transition at every call site. The reduced-motion block further down
+     already neutralises this, with no per-component opt-in. */
+  .card-lift {
+    transition-property: transform, box-shadow, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* The canonical hairline. Written as `border-[#3C494C]/70` inline it drifts
+     the moment the token changes; this keeps a single definition. */
+  .hairline {
+    border-color: rgb(60 73 76 / 0.7);
+  }
+
+  /* Frosted panel for anything floating above the canvas (sheets, dropdowns). */
+  .glass {
+    background-color: rgb(30 30 46 / 0.82);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --color-canvas: #121212;
+  --color-surface: #1e1e2e;
+  --color-surface-elevated: #27273a;
+  --color-accent: #22d3ee;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-border: #3c494c;
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-color: var(--color-border);
+  scrollbar-color: var(--color-accent) var(--color-surface);
+  scrollbar-width: thin;
+}
+
+html {
+  min-height: 100%;
+  background: var(--color-canvas);
+  /* Pinned. No page-level or third-party rule may reintroduce a black shell,
+     which is how the owner sub-pages lost the canvas depth in the first place.
+     Deliberately NOT applied to `main`: a panel that deliberately paints its
+     own surface must keep the right to. */
+  background-color: var(--color-canvas) !important;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-canvas);
+  background-color: var(--color-canvas) !important;
+  color: var(--color-text);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgb(34 211 238 / 0.3);
+  color: var(--color-text);
+}
+
+/* Chromium, Safari, and other WebKit-based browsers. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 32px;
+  border: 2px solid var(--color-surface);
+  border-radius: 9999px;
+  background: var(--color-accent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #67e8f9;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile / touch ergonomics utilities
+   --------------------------------------------------------------------------- */
+
+/* Respects the home-indicator / gesture bar on notched devices. */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.h-safe-bottom {
+  height: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Horizontal chip rows: momentum swipe without a visible scrollbar. */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Bottom-sheet entrance. */
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-sheet-up {
+  animation: sheet-up 260ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease-out;
+}
+
+/*
+ * iOS Safari zooms the viewport when a focused input's font-size is under
+ * 16px. Enforcing it at the element level is the only reliable block.
+ */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
