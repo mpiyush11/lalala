@@ -1,0 +1,22 @@
+{
+  "name": "GymOS Dev",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "postCreateCommand": "npm install",
+  "postStartCommand": "npm run dev -- --hostname 0.0.0.0 --port 3000",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "GymOS",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
